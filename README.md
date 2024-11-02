@@ -17,7 +17,7 @@ metadata:
        "csf.io/burst.percent" : "50"
 
 # configures the containers of ns:test-namespace with
-#      cpu.cfs_burst_us = 50% of the cpu.cfs_quota_us.
+#      cpu.cfs_burst_us = 50% of cpu.cfs_quota_us.
 ```
 
 ## Implementation
