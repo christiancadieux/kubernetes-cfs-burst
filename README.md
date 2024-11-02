@@ -38,7 +38,7 @@ Implemented as a daemonset that runs on all the nodes of the cluster and has acc
 
 ## Note
 
-It's possible to use cfs_burst_us even when the feature is not globally enabled. In this case, the value of cfs_burst_us cannot exceed cfs_qquota_us but the nr_bursts and nr_burst_time values in the file cpu.stats will still be updated.
+It's possible to use cfs_burst_us even when the feature is not globally enabled. In this case, the value of cfs_burst_us cannot exceed cfs_quota_us but the nr_bursts and nr_burst_time values in the file cpu.stats will still be updated.
 
 
 ## Reference:
