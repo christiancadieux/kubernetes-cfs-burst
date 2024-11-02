@@ -14,7 +14,7 @@ kind: Namespace
 metadata:
    name: "test-namespace"
    annotations:
-       "csf.io/burst.percent" : "50"
+       "cfs.io/burst.percent" : "50"
 
 # configures the containers of ns:test-namespace with
 #      cpu.cfs_burst_us = 50% of cpu.cfs_quota_us.

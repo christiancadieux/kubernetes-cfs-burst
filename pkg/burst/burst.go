@@ -16,7 +16,7 @@ const (
 	WATCH_TIMEOUT      = int64(30 * 60)
 	CFS_BURST_FILE     = "cpu.cfs_burst_us"
 	CFS_QUOTA_FILE     = "cpu.cfs_quota_us"
-	RDEI_BURST_PERCENT = "rdei.io/burst_percent"
+	RDEI_BURST_PERCENT = "cfs.io/burst_percent"
 )
 
 type BurstManager struct {
