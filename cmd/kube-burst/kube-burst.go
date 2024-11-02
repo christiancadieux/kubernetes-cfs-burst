@@ -7,11 +7,13 @@ import (
 	"github.com/christiancadieux/kubernetes-cfs-burst/pkg/client"
 	"github.com/sirupsen/logrus"
 	"os"
+	"strconv"
 )
 
 const (
-	CGROUP       = "/sys/fs/cgroup/cpu,cpuacct/kubepods"
-	MY_NODE_NAME = "MY_NODE_NAME"
+	MAX_BURST_PERCENT = "MAX_BURST_PERCENT"
+	CGROUP            = "/sys/fs/cgroup/cpu,cpuacct/kubepods"
+	MY_NODE_NAME      = "MY_NODE_NAME"
 )
 
 func main() {
@@ -34,6 +36,17 @@ func main() {
 		dryRun = false
 	}
 
+	maxBurstPercent := 200
+	max := os.Getenv(MAX_BURST_PERCENT)
+	if max != "" {
+		maxI, err := strconv.Atoi(max)
+		if err != nil {
+			logger.Errorf("Invalid %s", MAX_BURST_PERCENT)
+			os.Exit(1)
+		}
+		maxBurstPercent = maxI
+	}
+
 	var err error
 	kubeClient, err := client.LoadInClusterClient()
 	if err != nil {
@@ -42,7 +55,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	namespaceMgr := burst.NewNamespaceManager(logger, ctx, kubeClient, nodeName)
+	namespaceMgr := burst.NewNamespaceManager(logger, ctx, kubeClient, nodeName, maxBurstPercent)
 	burstMgr := burst.NewBurstManager(logger, ctx, dryRun, kubeClient, nodeName, namespaceMgr, cgroupPath)
 	go func() {
 		err := namespaceMgr.Watch()

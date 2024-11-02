@@ -18,17 +18,19 @@ type NamespaceMgr struct {
 	clientset             *kubernetes.Clientset
 	nodeName              string
 	namespaceBurstPercent map[string]int
+	maxBurstPercent       int
 	sync.Mutex
 }
 
 // NewNamespaceManager - monitor new/updated namespaces and save burst% in namespaceBurstPercent
-func NewNamespaceManager(logger *logrus.Logger, ctx context.Context, clientset *kubernetes.Clientset, nodeName string) *NamespaceMgr {
+func NewNamespaceManager(logger *logrus.Logger, ctx context.Context, clientset *kubernetes.Clientset, nodeName string, maxBurstPercent int) *NamespaceMgr {
 	return &NamespaceMgr{
 		logger:                logger,
 		ctx:                   ctx,
 		clientset:             clientset,
 		nodeName:              nodeName,
 		namespaceBurstPercent: map[string]int{},
+		maxBurstPercent:       maxBurstPercent,
 	}
 }
 
@@ -91,8 +93,8 @@ func (ns *NamespaceMgr) updateNs(item *corev1.Namespace) {
 		if s1, ok := item.Annotations[RDEI_BURST_PERCENT]; ok {
 			val, err := strconv.Atoi(s1)
 			if err == nil {
-				if val < 0 || val > 100 {
-					ns.logger.Warningf("%s - Percentage %d is invalid", item.Name, val)
+				if val < 0 || val > ns.maxBurstPercent {
+					ns.logger.Warningf("%s - Percentage %d is invalid (max=%d)", item.Name, val, ns.maxBurstPercent)
 					return
 				}
 				ns.namespaceBurstPercent[item.Name] = val

@@ -16,6 +16,8 @@ spec:
     spec:
       containers:
       - env:
+        - name: MAX_BURST_PERCENT
+          value: "200"
         - name: DRY_RUN
           value: "Y"
         - name: MY_NODE_NAME
