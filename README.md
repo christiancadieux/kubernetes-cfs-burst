@@ -13,6 +13,7 @@ To use CFS Burst, the feature must be globally enabled on the nodes:
 echo 1 > /proc/sys/kernel/sched_cfs_bw_burst_enabled
 
 ```
+In some OS like flatcar, this directory is read-only and can only be updated by creating a different OS image.
 
 Example:
 ```
