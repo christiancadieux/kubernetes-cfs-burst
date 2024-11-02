@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+  labels:
+    app: kube-cfs-burst
+  name: kube-cfs-burst
+spec:
+  selector:
+    matchLabels:
+      name: kube-cfs-burst
+  template:
+    metadata:
+      labels:
+        name: kube-cfs-burst
+    spec:
+      containers:
+      - env:
+        - name: DRY_RUN
+          value: "Y"
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: CGROUP_PATH
+          value: "/cgroup"
+        image: kube-cfs-burst:v1.0.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+
+        name: kube-cfs-burst
+        volumeMounts:
+        - mountPath: /cgroup
+          name: cgroup
+        - mountPath: /etc/resolv.conf
+          name: conf
+        - mountPath: /etc/environment
+          name: envfile
+        - mountPath: /etc/hosts
+          name: hosts
+        - mountPath: /etc/kubernetes
+          name: config
+      hostNetwork: true
+      volumes:
+      - hostPath:
+          path: /sys/fs/cgroup/cpu,cpuacct/kubepods
+          type: ""
+        name: cgroup
+      - hostPath:
+          path: /etc/resolv.conf
+          type: ""
+        name: conf
+      - hostPath:
+          path: /etc/environment
+          type: ""
+        name: envfile
+      - hostPath:
+          path: /etc/hosts
+          type: ""
+        name: hosts
+      - hostPath:
+          path: /etc/kubernetes
+          type: ""
+        name: config
