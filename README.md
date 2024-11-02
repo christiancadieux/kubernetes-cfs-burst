@@ -35,6 +35,9 @@ Implemented as a daemonset that runs on all the nodes of the cluster and has acc
   - The service monitors all the namespaces of the cluster and save a map of the burst percentage associated with each namespace.
   - The service monitors all pods running on it's node for additions/updates, find the corresponding /sys/fs/cgroup/cpu,cpuacct/kubepods/ container directories of the pod and update the value of  cpu.cfs_burst_us.
 
+## Note
+
+It's possible to use cfs_burst_us even when the feature is not globally enabled. In this case, the value of cfs_burst_us cannot exceed cfs_qquota_us but the nr_bursts and nr_burst_time values in the file cpu.stats will still be updated.
 
 
 ## Reference:
