@@ -1,8 +1,9 @@
 
 # Kubernetes Support for CFS Burst
 
-This daemonset automatically configure CFS Burst in kubenetes containers by monitoring Namespace changes 
-and new pods. 
+Automatically configure CFS Burst in kubenetes containers by monitoring namespace and pods and updating the 
+corresponding container directories in /sys/fs/cgroup/cpu,cpuacct/kubepods.
+
 The value of cpu.cfs_burst_us is calculated as a percentage of cpu.cfs_quota_us for each container. The percentage itself
 is saved as an annotation in the namespace of the containers.
 
@@ -17,7 +18,7 @@ metadata:
        "cfs.io/burst.percent" : "50"
 
 # configures the containers of ns:test-namespace with
-#      cpu.cfs_burst_us = 50% of cpu.cfs_quota_us.
+#      cpu.cfs_burst_us = 50% of cpu.cfs_quota_us
 ```
 
 ## Implementation
