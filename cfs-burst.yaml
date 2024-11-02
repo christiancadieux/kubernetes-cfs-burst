@@ -27,6 +27,8 @@ spec:
           value: "/cgroup"
         image: kube-cfs-burst:v1.0.0
         imagePullPolicy: Always
+        securityContext:
+          privileged: true
         resources:
           limits:
             cpu: 500m
@@ -47,7 +49,6 @@ spec:
           name: hosts
         - mountPath: /etc/kubernetes
           name: config
-      hostNetwork: true
       volumes:
       - hostPath:
           path: /sys/fs/cgroup/cpu,cpuacct/kubepods
