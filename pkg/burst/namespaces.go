@@ -91,6 +91,10 @@ func (ns *NamespaceMgr) updateNs(item *corev1.Namespace) {
 		if s1, ok := item.Annotations[RDEI_BURST_PERCENT]; ok {
 			val, err := strconv.Atoi(s1)
 			if err == nil {
+				if val < 0 || val > 100 {
+					ns.logger.Warningf("%s - Percentage %d is invalid", item.Name, val)
+					return
+				}
 				ns.namespaceBurstPercent[item.Name] = val
 				return
 			}
